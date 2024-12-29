@@ -64,8 +64,10 @@ class Lyrics:
             else:
                 raise NoLyricsAvailable
         except NoLyricsAvailable:
-            lyrics = self.genius.search_song(metadata.name, metadata.artist).lyrics
-            lyrics = re.sub(r"\[.*\]\n", "", lyrics) # Remove annotations like [Verse 1]
+            song = self.genius.search_song(metadata.name, metadata.artist)
+            if song is None:
+                raise NoLyricsAvailable
+            lyrics = re.sub(r"\[.*\]\n", "", song.lyrics) # Remove annotations like [Verse 1]
             return lyrics
 
     def select_lines(self, lyrics: str, selection: str) -> str:
