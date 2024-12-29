@@ -5,7 +5,10 @@ Provides functionality for retrieving song lyrics using the LRClib API.
 """
 
 import re
+from typing import Optional
+
 from lrclib import LrcLibAPI
+from lyricsgenius import Genius
 
 from .spotify import TrackMetadata
 from .errors import (
@@ -20,6 +23,15 @@ class Lyrics:
     """
     A class for interacting with the LRClib API to fetch and manage song lyrics.
     """
+
+    def __init__(self, GENIUS_ACCESS_TOKEN: Optional[str] = None) -> None:
+        """
+        Initializes the Lyrics class.
+        """
+        self.GENIUS_ACCESS_TOKEN = GENIUS_ACCESS_TOKEN
+        if self.GENIUS_ACCESS_TOKEN is not None:
+            self.__BASE_URL = "https://api.genius.com"
+            self.genius = Genius(self.GENIUS_ACCESS_TOKEN)
 
     def get_lyrics(self, metadata: TrackMetadata) -> str:
         """
@@ -42,14 +54,20 @@ class Lyrics:
         api = LrcLibAPI(user_agent=user_agent)
         id = api.search_lyrics(track_name=metadata.name, artist_name=metadata.artist)
 
-        # Check if lyrics are available
-        if len(id) != 0:
-            lyrics = api.get_lyrics_by_id(id[0].id).plain_lyrics
-            if lyrics is None:
+        try:
+            # Check if lyrics are available
+            raise NoLyricsAvailable # remove later, for testing only
+            if len(id) != 0:
+                lyrics = api.get_lyrics_by_id(id[0].id).plain_lyrics
+                if lyrics is None:
+                    raise NoLyricsAvailable
+                return str(lyrics)
+            else:
                 raise NoLyricsAvailable
-            return str(lyrics)
-        else:
-            raise NoLyricsAvailable
+        except NoLyricsAvailable:
+            lyrics = self.genius.search_song(metadata.name, metadata.artist).lyrics
+            lyrics = re.sub(r"\[.*\]\n", "", lyrics) # Remove annotations like [Verse 1]
+            return lyrics
 
     def select_lines(self, lyrics: str, selection: str) -> str:
         """
