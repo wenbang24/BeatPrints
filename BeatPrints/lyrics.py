@@ -21,7 +21,7 @@ from .errors import (
 
 class Lyrics:
     """
-    A class for interacting with the LRClib API to fetch and manage song lyrics.
+    A class for interacting with the LRClib API (and optionally Genius API) to fetch and manage song lyrics.
     """
 
     def __init__(self, GENIUS_ACCESS_TOKEN: Optional[str] = None) -> None:
@@ -35,7 +35,7 @@ class Lyrics:
 
     def get_lyrics(self, metadata: TrackMetadata) -> str:
         """
-        Retrieves lyrics from LRClib.net for a specified track and artist.
+        Retrieves lyrics from LRClib.net or Genius for a specified track and artist.
 
         Args:
             metadata (TrackMetadata): An object containing the track's metadata.
