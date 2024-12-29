@@ -31,7 +31,7 @@ class Lyrics:
         self.GENIUS_ACCESS_TOKEN = GENIUS_ACCESS_TOKEN
         if self.GENIUS_ACCESS_TOKEN is not None:
             self.__BASE_URL = "https://api.genius.com"
-            self.genius = Genius(self.GENIUS_ACCESS_TOKEN)
+            self.genius = Genius(self.GENIUS_ACCESS_TOKEN, verbose=False)
 
     def get_lyrics(self, metadata: TrackMetadata) -> str:
         """
