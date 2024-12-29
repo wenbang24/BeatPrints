@@ -18,3 +18,7 @@ POSTERS_DIR = config["general"]["output_directory"]
 SEARCH_LIMIT = config["general"]["search_limit"]
 CLIENT_ID = config["credentials"]["client_id"]
 CLIENT_SECRET = config["credentials"]["client_secret"]
+try:
+    GENIUS_ACCESS_TOKEN = config["credentials"]["genius_access_token"]
+except KeyError:
+    GENIUS_ACCESS_TOKEN = None

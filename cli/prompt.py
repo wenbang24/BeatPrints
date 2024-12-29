@@ -8,7 +8,7 @@ from cli import exutils, validate
 from BeatPrints import lyrics, spotify, poster, errors
 
 # Initialize components
-ly = lyrics.Lyrics()
+ly = lyrics.Lyrics(GENIUS_ACCESS_TOKEN)
 ps = poster.Poster(POSTERS_DIR)
 sp = spotify.Spotify(CLIENT_ID, CLIENT_SECRET)
 
